@@ -106,4 +106,22 @@ public static class RegistryUtil
         using var regKey = GetKey(hive, keyName);
         return regKey?.GetValue(valueName) as string ?? defaultValue;
     }
+
+    public static bool TryMapHive(string token, out RegistryHive hive)
+    {
+        switch (token.Trim().ToUpperInvariant())
+        {
+            case "HKLM":
+            case "HKEY_LOCAL_MACHINE": hive = RegistryHive.LocalMachine; return true;
+            case "HKCU":
+            case "HKEY_CURRENT_USER": hive = RegistryHive.CurrentUser; return true;
+            case "HKCR":
+            case "HKEY_CLASSES_ROOT": hive = RegistryHive.ClassesRoot; return true;
+            case "HKU":
+            case "HKEY_USERS": hive = RegistryHive.Users; return true;
+            case "HKCC":
+            case "HKEY_CURRENT_CONFIG": hive = RegistryHive.CurrentConfig; return true;
+            default: hive = default; return false;
+        }
+    }
 }
